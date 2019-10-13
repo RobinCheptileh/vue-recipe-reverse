@@ -40,6 +40,7 @@
     "typescript": "^3.4.3",
     "vue-cli-plugin-bootstrap-vue": "^0.4.0",
     "vue-template-compiler": "^2.6.10",
+    "vue-unicons": "^1.4.1",
     "vuelidate": "^0.7.4"
   },
   "postcss": {
