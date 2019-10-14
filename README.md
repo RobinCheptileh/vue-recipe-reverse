@@ -1,4 +1,6 @@
-# vue-recipe-reverse
+# Recipe Reverse
+
+Vue web app for the [Recipe Reverse](https://github.com/RobinCheptileh/recipe-reverse-spring) API. See it in action [here](https://recipe-reverse.cognition.co.ke/#/).
 
 ## Project setup
 ```
