@@ -24,6 +24,7 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
+    import _ from 'lodash';
     import Recipe from '@/components/Recipe.vue';
     import {Recipe as RecipeModel} from '../models/Recipe';
     import RecipeService from '@/services/RecipeService';
@@ -34,6 +35,14 @@
         },
     })
     export default class Home extends Vue {
+        private debouncedSearch = _.debounce(ingredients => {
+            if (ingredients && ingredients !== '') {
+                this.searchRecipe(ingredients);
+            } else {
+                this.getRecipes();
+            }
+        }, 1000);
+
         public mounted() {
             if (this.ingredients === '') {
                 this.getRecipes();
@@ -46,12 +55,7 @@
 
         set ingredients(ingredients: string) {
             this.$store.dispatch('setIngredients', ingredients);
-
-            if (ingredients && ingredients !== '') {
-                this.searchRecipe(ingredients);
-            } else {
-                this.getRecipes();
-            }
+            this.debouncedSearch(ingredients);
         }
 
         get recipes(): RecipeModel[] {
