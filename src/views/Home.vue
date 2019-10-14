@@ -35,6 +35,19 @@
         },
     })
     export default class Home extends Vue {
+        get ingredients(): string {
+            return this.$store.getters.ingredients;
+        }
+
+        set ingredients(ingredients: string) {
+            this.$store.dispatch('setIngredients', ingredients);
+            this.debouncedSearch(ingredients);
+        }
+
+        get recipes(): RecipeModel[] {
+            return this.$store.getters.recipes;
+        }
+
         private debouncedSearch = _.debounce(ingredients => {
             if (ingredients && ingredients !== '') {
                 this.searchRecipe(ingredients);
@@ -49,24 +62,6 @@
             }
         }
 
-        get ingredients(): string {
-            return this.$store.getters.ingredients;
-        }
-
-        set ingredients(ingredients: string) {
-            this.$store.dispatch('setIngredients', ingredients);
-            this.debouncedSearch(ingredients);
-        }
-
-        get recipes(): RecipeModel[] {
-            return this.$store.getters.recipes;
-        }
-
-        private getRecipes() {
-            RecipeService.getRecipes()
-                .then(data => this.$store.dispatch('setRecipes', data));
-        }
-
         public searchRecipe(ingredients: string) {
             RecipeService.searchRecipe(ingredients)
                 .then(data => this.$store.dispatch('setRecipes', data));
@@ -74,6 +69,11 @@
 
         public searchForm() {
             this.searchRecipe(this.ingredients);
+        }
+
+        private getRecipes() {
+            RecipeService.getRecipes()
+                .then(data => this.$store.dispatch('setRecipes', data));
         }
     }
 </script>
