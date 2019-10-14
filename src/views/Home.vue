@@ -26,6 +26,7 @@
     import {Component, Vue} from 'vue-property-decorator';
     import Recipe from '@/components/Recipe.vue';
     import {Recipe as RecipeModel} from '../models/Recipe';
+    import RecipeService from '@/services/RecipeService';
 
     @Component({
         components: {
@@ -33,31 +34,38 @@
         },
     })
     export default class Home extends Vue {
-        public recipes: RecipeModel[] = [];
-        private privateIngredients: string = '';
-
         public mounted() {
-            fetch('https://recipe-reverse-api.herokuapp.com/recipes')
-                .then(data => data.json())
-                .then(data => this.recipes = data);
-        }
-
-        get ingredients(): string {
-            return this.privateIngredients;
-        }
-
-        set ingredients(ingredients: string) {
-            this.privateIngredients = ingredients;
-
-            if (ingredients && ingredients !== '') {
-                this.searchRecipe(ingredients);
+            if (this.ingredients === '') {
+                this.getRecipes();
             }
         }
 
+        get ingredients(): string {
+            return this.$store.getters.ingredients;
+        }
+
+        set ingredients(ingredients: string) {
+            this.$store.dispatch('setIngredients', ingredients);
+
+            if (ingredients && ingredients !== '') {
+                this.searchRecipe(ingredients);
+            } else {
+                this.getRecipes();
+            }
+        }
+
+        get recipes(): RecipeModel[] {
+            return this.$store.getters.recipes;
+        }
+
+        private getRecipes() {
+            RecipeService.getRecipes()
+                .then(data => this.$store.dispatch('setRecipes', data));
+        }
+
         public searchRecipe(ingredients: string) {
-            fetch(`https://recipe-reverse-api.herokuapp.com/recipes/recommendations?ingredients=${ingredients}`)
-                .then(data => data.json())
-                .then(data => this.recipes = data);
+            RecipeService.searchRecipe(ingredients)
+                .then(data => this.$store.dispatch('setRecipes', data));
         }
 
         public searchForm() {
