@@ -36,7 +36,7 @@
     "chai": "^4.1.2",
     "lodash": "^4.17.15",
     "mutationobserver-shim": "^0.3.3",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "popper.js": "^1.15.0",
     "portal-vue": "^2.1.4",
     "sass-loader": "^8.0.0",
